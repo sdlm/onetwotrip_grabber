@@ -1,25 +1,28 @@
 import json
-from pprint import pprint
-from typing import List
+from typing import List, Optional
 
 import requests
 
 FILENAME = 'proxy_pool.json'
 
 
-def get_proxy():
+def get_proxy() -> Optional[dict]:
     response = requests.get('https://api.getproxylist.com/proxy?protocol[]=socks5')
     proxy = response.json()
-    return {
-        'ip': proxy['ip'],
-        'port': proxy['port'],
-    }
+    try:
+        return {
+            'ip': proxy['ip'],
+            'port': proxy['port'],
+        }
+    except KeyError:
+        return None
 
 
 def get_proxy_pool(count: int = 1) -> List:
-    return [
+    proxies = [
         get_proxy() for _ in range(count)
     ]
+    return [proxy for proxy in proxies if proxy]
 
 
 def save_to_file(pool: List):
