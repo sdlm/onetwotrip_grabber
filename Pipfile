@@ -5,6 +5,8 @@ name = "pypi"
 
 [packages]
 requests = {extras = ["socks"], version = "*"}
+aiohttp = "*"
+aiohttp-socks = "*"
 
 [dev-packages]
 
