@@ -1,3 +1,4 @@
+import os
 import json
 from typing import List, Optional
 
@@ -31,6 +32,8 @@ def save_to_file(pool: List):
 
 
 def load_from_file() -> List:
+    if not os.path.exists(FILENAME):
+        return []
     with open(FILENAME) as json_data:
         return json.load(json_data)
 

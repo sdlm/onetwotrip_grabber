@@ -2,7 +2,7 @@ import aiohttp
 import asyncio
 from aiohttp_socks import SocksConnector
 
-from proxy_grabber import load_from_file
+from proxy_grabber import load_from_file, save_to_file
 
 PYTHON_URL = 'http://python.org'
 DEFAULT_TIMEOUT = 10
@@ -29,24 +29,24 @@ async def main():
 
     results = await asyncio.gather(*futures)
 
-    count = 0
+    renew_pool = []
     for result in results:
         proxy = result['proxy']
         if proxy is None:
             continue
 
         if result['response'] is not None and proxy is not None:
-            count += 1
             print(f'Valid proxy: {proxy}')
+            proxy_obj = {
+                'ip': proxy.split(':')[0],
+                'port': proxy.split(':')[1],
+            }
+            renew_pool.append(proxy_obj)
 
-    if count == 0:
+    if len(renew_pool):
         print('No one valid proxy!')
 
-        # if text != sample:
-        #     print(f'Bad proxy: {address}')
-        #     continue
-        #
-        # print(f'Valid proxy: {address}')
+    save_to_file(renew_pool)
 
 
 async def load_content(
