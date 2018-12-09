@@ -42,5 +42,5 @@ if __name__ == '__main__':
     pool = load_from_file()
     new_proxies = get_proxy_pool(10)
     pool.extend(new_proxies)
-    print(f'Pool contain {len(new_proxies)} proxies.')
+    print(f'Add to pool {len(new_proxies)} proxies.')
     save_to_file(pool)

@@ -27,10 +27,13 @@ async def main():
             )
         )
 
-    results = await asyncio.gather(*futures)
+    results = await asyncio.gather(*futures, return_exceptions=True)
 
     renew_pool = []
     for result in results:
+        if isinstance(result, Exception):
+            continue
+
         proxy = result['proxy']
         if proxy is None:
             continue
@@ -43,7 +46,7 @@ async def main():
             }
             renew_pool.append(proxy_obj)
 
-    if len(renew_pool):
+    if not renew_pool:
         print('No one valid proxy!')
 
     save_to_file(renew_pool)
